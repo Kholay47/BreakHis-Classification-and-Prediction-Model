@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Breast Cancer Classification</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: #f8f9fa;
+    }
+    .container {
+      margin-top: 50px;
+      max-width: 700px;
+    }
+    .upload-box {
+      border: 2px dashed #6c757d;
+      border-radius: 10px;
+      padding: 40px;
+      text-align: center;
+      background: #fff;
+      transition: background 0.3s ease;
+    }
+    .upload-box.dragover {
+      background: #e9ecef;
+    }
+    .preview {
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      margin-top: 10px;
+      display: none;
+    }
+    .prediction-box {
+      margin-top: 30px;
+      padding: 20px;
+      border-radius: 10px;
+      background: #ffffff;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 class="text-center mb-4">Breast Cancer Classification</h2>
+
+    <!-- Upload Form -->
+    <form method="post" enctype="multipart/form-data">
+      <div class="upload-box" id="upload-box">
+        <p class="mb-3">Drag & Drop your image here</p>
+        <input type="file" name="file" id="file-input" class="form-control" hidden required>
+        <button type="button" class="btn btn-outline-primary" onclick="document.getElementById('file-input').click();">Choose File</button>
+        <p class="mt-2 text-muted" id="file-name">No file selected</p>
+        <img id="preview" class="preview" />
+      </div>
+      <div class="text-center mt-3">
+        <button type="submit" class="btn btn-primary">Predict</button>
+      </div>
+    </form>
+
+    <!-- Prediction Result -->
+    {% if prediction %}
+    <div class="prediction-box">
+      {% if prediction|lower == "benign" %}
+        <h4>Prediction: <span class="text-success">{{ prediction }}</span></h4>
+      {% elif prediction|lower == "malignant" %}
+        <h4>Prediction: <span class="text-danger">{{ prediction }}</span></h4>
+      {% else %}
+        <h4>Prediction: <span class="text-secondary">{{ prediction }}</span></h4>
+      {% endif %}
+
+      <h5> {{ (confidence * 100) | round(2) }}%</h5>
+
+      {% set conf_percent = (confidence * 100) | round(2) %}
+      {% if conf_percent >= 80 %}
+        {% set bar_class = "bg-success" %}
+      {% elif conf_percent >= 50 %}
+        {% set bar_class = "bg-warning" %}
+      {% else %}
+        {% set bar_class = "bg-danger" %}
+      {% endif %}
+
+      <div class="progress my-3" style="height: 25px;">
+        <div class="progress-bar {{ bar_class }}" 
+             role="progressbar" 
+             style="width: {{ conf_percent }}%;" 
+             aria-valuenow="{{ conf_percent }}" 
+             aria-valuemin="0" 
+             aria-valuemax="100">
+          {{ conf_percent }}%
+        </div>
+      </div>
+
+      <img src="{{ url_for('static', filename='uploads/' ~ uploaded_image) }}" 
+           class="preview mt-3" 
+           style="display:block; max-height:300px; margin:auto;">
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Script for drag-drop & preview -->
+  <script>
+    const uploadBox = document.getElementById("upload-box");
+    const fileInput = document.getElementById("file-input");
+    const fileName = document.getElementById("file-name");
+    const preview = document.getElementById("preview");
+
+    // Drag & Drop Events
+    uploadBox.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      uploadBox.classList.add("dragover");
+    });
+
+    uploadBox.addEventListener("dragleave", () => {
+      uploadBox.classList.remove("dragover");
+    });
+
+    uploadBox.addEventListener("drop", (e) => {
+      e.preventDefault();
+      uploadBox.classList.remove("dragover");
+      if (e.dataTransfer.files.length) {
+        fileInput.files = e.dataTransfer.files;
+        fileName.textContent = e.dataTransfer.files[0].name;
+        previewImage(e.dataTransfer.files[0]);
+      }
+    });
+
+    fileInput.addEventListener("change", () => {
+      if (fileInput.files.length > 0) {
+        fileName.textContent = fileInput.files[0].name;
+        previewImage(fileInput.files[0]);
+      }
+    });
+
+    function previewImage(file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        preview.src = e.target.result;
+        preview.style.display = "block";
+      };
+      reader.readAsDataURL(file);
+    }
+  </script>
+</body>
+</html>
