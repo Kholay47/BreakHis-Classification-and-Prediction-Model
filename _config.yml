@@ -1,57 +1,21 @@
 # =====================================================
-#  Minimal Mistakes Jekyll Theme Configuration
+# GitHub Pages Config with Architect Jekyll Theme
 # =====================================================
 
-# Site settings
 title: "Breast Cancer Classification with EfficientNet"
-name: "Aayush Kholay"
 description: "A deep learning project using EfficientNet and Flask to classify histopathological images of breast cancer into 8 classes."
-url: "https://Kholay47.github.io"   # Replace with your GitHub Pages URL
-baseurl: "/BreakHis-Classification-and-Prediction-Model"              # Repo name if project site, else ""
+theme: jekyll-theme-architect
 
-# Build settings
-markdown: kramdown
-remote_theme: mmistakes/minimal-mistakes
-plugins:
-  - jekyll-feed
-  - jekyll-seo-tag
-  - jekyll-sitemap
-  - jekyll-include-cache   # ✅ This fixes the include_cached error
+# URL settings (update these with your repo details)
+url: "https://Kholay47.github.io"   # your GitHub Pages URL
+baseurl: "/BreakHis-Classification-and-Prediction-Model"              # the repo name if not publishing from username.github.io
 
-
-# Theme settings
-minimal_mistakes_skin: "dark" # Options: air, contrast, dark, dirt, mint, neon, sunrise
-
-# Navigation
-nav:
-  - title: "Home"
-    url: /
-  - title: "About"
-    url: /about/
-  - title: "Documentation"
-    url: /docs/
-  - title: "GitHub Repo"
-    url: "https://github.com/yourusername/your-repo-name"
-
-# Author settings
+# Author details
 author:
-  name: "Your Name"
-  avatar: "/assets/images/profile.png"  # Add profile pic in assets/images
-  bio: "Deep Learning Enthusiast | Flask Developer | AI for Healthcare"
-  links:
-    - label: "GitHub"
-      icon: "fab fa-github"
-      url: "https://github.com/Kholay47/BreakHis-Classification-and-Prediction-Model"
-    - label: "LinkedIn"
-      icon: "fab fa-linkedin"
-      url: "https://linkedin.com/in/aayush-kholay"
+  name: "Aayush Kholay"
+  email: "aayushkholay@gmail.com"
 
-# Footer
-footer:
-  links:
-    - label: "GitHub"
-      icon: "fab fa-github"
-      url: "https://github.com/Kholay47"
-    - label: "LinkedIn"
-      icon: "fab fa-linkedin"
-      url: "https://linkedin.com/in/aayush-kholay"
+# Social links
+social_links:
+  github: Kholay47
+  linkedin: aayush-kholay
